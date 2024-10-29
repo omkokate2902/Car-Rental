@@ -3,7 +3,7 @@ name: CI/CD Pipeline Dev
 on:
   push:
     branches:
-      - dev  # Changed to the 'testing' branch
+      - dev
   pull_request:
     branches:
       - dev
