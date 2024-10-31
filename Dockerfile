@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a parent image
-FROM node:18
+FROM --platform=linux/amd64 node:18
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
@@ -15,6 +15,13 @@ COPY . .
 
 # Expose the port the app runs on
 EXPOSE 3000
+
+# Optionally set environment variables
+# ENV NODE_ENV=production
+
+# Create a non-root user and switch to it
+# RUN useradd -ms /bin/bash appuser
+# USER appuser
 
 # Define the command to run the app
 CMD ["node", "app.js"]
