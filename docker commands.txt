@@ -1,0 +1,8 @@
+# Build the Docker image for the amd64 platform
+docker build --platform linux/amd64 -t omkokate2902/car-rental-dev:latest .
+
+# Log in to Docker Hub
+docker login
+
+# Push the Docker image to Docker Hub
+docker push omkokate2902/car-rental-dev:latest
