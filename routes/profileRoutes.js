@@ -8,5 +8,7 @@ const router = express.Router();
 // Protect the profile routes with authentication middleware
 router.get('/', authMiddleware, profileController.getProfile);
 router.put('/', authMiddleware, profileController.updateProfile);
+router.post('/addOwner', authMiddleware, profileController.addOwnerRole);
+router.post('/removeOwner', authMiddleware, profileController.removeOwnerRole);
 
 module.exports = router;
