@@ -11,8 +11,11 @@ connectDB();
 
 const app = express();
 
-// Use CORS middleware
-app.use(cors()); // Enable all CORS requests
+// Configure CORS to expose the Authorization header
+app.use(cors({
+  origin: '*', // Or replace with specific frontend URL
+  exposedHeaders: ['Authorization'], // Expose the Authorization header
+}));
 
 app.use(express.json());
 
