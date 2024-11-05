@@ -1,20 +1,25 @@
-const { adminAuth } = require('../services/firebaseService'); // Ensure this points to your Firebase admin setup
+// middlewares/authMiddleware.js
+const { clientAuthInstance } = require('../services/firebaseService');
+const admin = require('firebase-admin'); // Firebase Admin SDK
 
 const authMiddleware = async (req, res, next) => {
-    const token = req.headers.authorization?.split(' ')[1]; // Extract token from Authorization header
+  try {
+    const authHeader = req.headers.authorization;
 
-    if (!token) {
-        return res.status(403).json({ message: 'Access denied, no token provided.' });
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ message: 'Access denied, no token provided.' });
     }
 
-    try {
-        const decodedToken = await adminAuth.verifyIdToken(token);
-        req.user = { uid: decodedToken.uid }; // Store user ID for later use
-        next(); // Proceed to the next middleware or route handler
-    } catch (error) {
-        console.error('Token verification error:', error);
-        res.status(401).json({ message: 'Invalid token.' });
-    }
+    const token = authHeader.split(' ')[1]; // Extract token from "Bearer <TOKEN>"
+
+    // Verify the token with Firebase Admin SDK
+    const decodedToken = await admin.auth().verifyIdToken(token);
+    req.user = decodedToken; // Attach decoded token payload to req.user
+
+    next(); // Proceed to the next middleware/controller
+  } catch (error) {
+    return res.status(401).json({ message: 'Invalid token.' });
+  }
 };
 
 module.exports = authMiddleware;

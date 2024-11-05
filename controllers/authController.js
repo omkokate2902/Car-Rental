@@ -1,4 +1,3 @@
-// controllers/authController.js
 const { clientAuthInstance } = require('../services/firebaseService');
 const { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, sendEmailVerification } = require('firebase/auth');
 const User = require('../models/User');
@@ -44,6 +43,11 @@ exports.loginUser = async (req, res) => {
     // Update isVerified status in MongoDB if not already updated
     await User.findOneAndUpdate({ firebaseUserId: userCredential.user.uid }, { isVerified: true });
 
+    // Get Firebase ID token
+    const token = await userCredential.user.getIdToken();
+
+    // Send the token in response headers
+    res.setHeader('Authorization', `Bearer ${token}`);
     res.status(200).json({ message: 'Login successful' });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -87,7 +91,12 @@ exports.adminLogin = async (req, res) => {
       await user.save();
     }
 
-    res.status(200).json({ message: 'Admin login successful'});
+    // Get Firebase ID token
+    const token = await userCredential.user.getIdToken();
+
+    // Send the token in response headers
+    res.setHeader('Authorization', `Bearer ${token}`);
+    res.status(200).json({ message: 'Admin login successful' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
