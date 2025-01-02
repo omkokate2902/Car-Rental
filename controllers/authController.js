@@ -46,8 +46,14 @@ exports.loginUser = async (req, res) => {
     // Get Firebase ID token
     const token = await userCredential.user.getIdToken();
 
-    // Send the token in response headers
-    res.setHeader('Authorization', `Bearer ${token}`);
+    // Set token in cookies (HttpOnly, Secure)
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Only secure in production
+      sameSite: 'strict', // Prevent CSRF
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    });
+
     res.status(200).json({ message: 'Login successful' });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -64,6 +70,16 @@ exports.forgotPassword = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+};
+
+// Logout User
+exports.logoutUser = (req, res) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+  });
+  res.status(200).json({ message: 'Logout successful' });
 };
 
 // Admin Login Function

@@ -6,10 +6,14 @@ const cors = require('cors'); // Require the cors package
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const profileRoutes = require('./routes/profileRoutes'); // Import the profile routes
+const cookieParser = require('cookie-parser'); // Import cookie-parser
 
 connectDB();
 
 const app = express();
+
+app.use(cookieParser()); // Make sure this is before the routes
+
 
 // Configure CORS to expose the Authorization header
 app.use(cors({

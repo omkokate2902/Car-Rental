@@ -1,16 +1,13 @@
-// middlewares/authMiddleware.js
 const { clientAuthInstance } = require('../services/firebaseService');
 const admin = require('firebase-admin'); // Firebase Admin SDK
 
 const authMiddleware = async (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
+    const token = req.cookies.token; // Extract token from cookies
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!token) {
       return res.status(401).json({ message: 'Access denied, no token provided.' });
     }
-
-    const token = authHeader.split(' ')[1]; // Extract token from "Bearer <TOKEN>"
 
     // Verify the token with Firebase Admin SDK
     const decodedToken = await admin.auth().verifyIdToken(token);
