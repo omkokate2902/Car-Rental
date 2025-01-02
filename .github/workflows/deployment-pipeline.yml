@@ -39,5 +39,8 @@ jobs:
           docker stop car-rental-dev || true
           docker rm car-rental-dev || true
 
+          # Clean up stopped containers and unused images
+          docker system prune -a -f
+
           # Run the new container with port 3000:3000
           docker run -d --name car-rental-dev -p 3000:3000 omkokate2902/car-rental-dev:latest
