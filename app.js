@@ -19,6 +19,7 @@ app.use(cookieParser()); // Make sure this is before the routes
 app.use(cors({
   origin: '*', // Or replace with specific frontend URL
   exposedHeaders: ['Authorization'], // Expose the Authorization header
+  credentials: true,
 }));
 
 app.use(express.json());
