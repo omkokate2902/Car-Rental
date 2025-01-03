@@ -21,7 +21,7 @@ app.use(express.json());
 
 // Main route to confirm the server is working
 app.get('/', (req, res) => {
-  res.send('Welcome to the Car Rental API! Server is running.');
+  res.send('Welcome to the Car Rental API! Server is running on header.');
 });
 
 // Authentication routes
