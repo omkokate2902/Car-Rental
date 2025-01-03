@@ -26,7 +26,7 @@ app.use(express.json());
 
 // Main route to confirm the server is working
 app.get('/', (req, res) => {
-  res.send('Welcome to the Car Rental API! Server is running fine as usual.');
+  res.send('Welcome to the Car Rental API! Server is running fine as usual after changing cors.');
 });
 
 // Authentication routes
