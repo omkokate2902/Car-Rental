@@ -6,6 +6,7 @@ const cors = require('cors'); // Require the cors package
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const profileRoutes = require('./routes/profileRoutes'); // Import the profile routes
+const vehicleRoutes = require('./routes/vehicleRoutes');
 
 connectDB();
 
@@ -29,6 +30,10 @@ app.use('/api/auth', authRoutes);
 
 // Profile routes
 app.use('/api/profile', profileRoutes);
+
+// Vehicle routes
+app.use('/api/vehicles', vehicleRoutes);
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
