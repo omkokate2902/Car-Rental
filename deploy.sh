@@ -1,5 +1,18 @@
 #!/bin/bash
 
+# Check if Docker is running
+if ! docker info > /dev/null 2>&1; then
+  echo "Docker is not running. Starting Docker..."
+  sudo systemctl start docker
+  if ! docker info > /dev/null 2>&1; then
+    echo "Failed to start Docker. Exiting."
+    exit 1
+  fi
+  echo "Docker started successfully."
+else
+  echo "Docker is already running."
+fi
+
 # Prompt for commit message
 read -p "Enter commit message: " commit_message
 
