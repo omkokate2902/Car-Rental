@@ -1,7 +1,7 @@
 const { uploadFileToS3 } = require('../config/s3');
 const Vehicle = require('../models/Vehicle');
 
-const uploadVehicleDetails = async (req, res) => {
+exports.uploadVehicleDetails = async (req, res) => {
   try {
     const { carName, carYear, perDayRate, transmission, fuel, seats, carFeatures } = req.body;
 
@@ -45,4 +45,24 @@ const uploadVehicleDetails = async (req, res) => {
   }
 };
 
-module.exports = { uploadVehicleDetails };
+// Fetch all approved vehicles excluding documents
+exports.getApprovedVehicles = async (req, res) => {
+  try {
+    const approvedVehicles = await Vehicle.find({ approved: true }).select('-documents'); // Exclude documents field
+
+    if (!approvedVehicles || approvedVehicles.length === 0) {
+      return res.status(404).json({ message: 'No approved vehicles found.' });
+    }
+
+    res.status(200).json({
+      message: 'Approved vehicles retrieved successfully',
+      data: approvedVehicles,
+    });
+  } catch (error) {
+    console.error('Error fetching approved vehicles:', error);
+    res.status(500).json({
+      message: 'Error fetching approved vehicles',
+      error: error.message,
+    });
+  }
+};

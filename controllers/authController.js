@@ -65,39 +65,3 @@ exports.forgotPassword = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-// Admin Login Function
-exports.adminLogin = async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const userCredential = await signInWithEmailAndPassword(clientAuthInstance, email, password);
-
-    // Check if the user is in the database
-    const user = await User.findOne({ firebaseUserId: userCredential.user.uid });
-
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Check if the user has admin role
-    if (!user.roles.includes('admin')) {
-      return res.status(403).json({ message: 'Access denied. Admins only.' });
-    }
-
-    // Update isVerified status in MongoDB if not already updated
-    if (!user.isVerified) {
-      user.isVerified = true;
-      await user.save();
-    }
-
-    // Get Firebase ID token
-    const token = await userCredential.user.getIdToken();
-
-    // Send the token in response headers
-    res.setHeader('Authorization', `Bearer ${token}`);
-    res.status(200).json({ message: 'Admin login successful' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};

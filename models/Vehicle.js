@@ -8,6 +8,7 @@ const vehicleSchema = new mongoose.Schema({
   fuel: { type: String, required: true },
   seats: { type: Number, required: true },
   carFeatures: [{ type: String }], // Array of features
+  approved: { type: Boolean, default: false }, // Approval status, defaults to false
   images: [{ type: String, required: true }], // Array of S3 URLs for images
   documents: [{ type: String, required: true }], // Array of S3 URLs for documents
 });

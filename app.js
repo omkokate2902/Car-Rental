@@ -7,6 +7,7 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const profileRoutes = require('./routes/profileRoutes'); // Import the profile routes
 const vehicleRoutes = require('./routes/vehicleRoutes');
+const adminRoutes = require('./routes/adminRoutes'); // Import the admin routes
 
 connectDB();
 
@@ -33,6 +34,9 @@ app.use('/api/profile', profileRoutes);
 
 // Vehicle routes
 app.use('/api/vehicles', vehicleRoutes);
+
+// Admin routes
+app.use('/api/admin', adminRoutes);
 
 
 const PORT = process.env.PORT || 3000;
